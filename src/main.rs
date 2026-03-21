@@ -1,11 +1,11 @@
 enum PlayingCardError {
-    InvalidRank,
+    InvalidRank {rank: u8},
 }
 
 impl PlayingCardError {
     pub fn as_str(&self) -> String {
         match self {
-            Self::InvalidRank => "InvalidRank".to_string(),
+            Self::InvalidRank { rank } => format!("InvalidRank received {}", rank),
         }
     }
 }
@@ -29,8 +29,7 @@ impl Suit {
     }
 }
 
-struct PlayingCard
-{
+struct PlayingCard {
     suit: Suit,
     rank: u8
 }
@@ -40,11 +39,11 @@ impl PlayingCard
     pub const MIN_RANK: u8 = 1;
     pub const MAX_RANK: u8 = 13;
 
-    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, (PlayingCardError, u8)>
+    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, PlayingCardError>
     {
         if (rank < PlayingCard::MIN_RANK) |
             (rank > PlayingCard::MAX_RANK) {
-            return Err((PlayingCardError::InvalidRank, rank))
+            return Err(PlayingCardError::InvalidRank{rank})
         }
 
         Ok(Self {
@@ -58,7 +57,7 @@ impl PlayingCard
     }
 }
 
-fn unsafe_main() -> Result<(), (PlayingCardError, u8)>  {
+fn unsafe_main() -> Result<(), PlayingCardError>  {
     for suit in [Suit::Clubs, Suit::Diamonds, Suit::Hearts, Suit::Spades] {
         for rank in PlayingCard::MIN_RANK..=PlayingCard::MAX_RANK
         {
@@ -75,6 +74,6 @@ fn main() {
     //  parameters but another function may return a different number or different types
     match unsafe_main() {
         Ok(_) => (),
-        Err(e) => println!("Caught error {} with {}", e.0.as_str(), e.1)
+        Err(e) => println!("Caught error {}", e.as_str())
     }
 }
