@@ -1,3 +1,5 @@
+use strum_macros::{Display};
+
 enum PlayingCardError {
     InvalidRank { rank: u8 },
 }
@@ -10,23 +12,12 @@ impl PlayingCardError {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Display)]
 enum Suit {
     Spades,
     Hearts,
     Diamonds,
     Clubs,
-}
-
-impl Suit {
-    pub const fn as_str(&self) -> &'static str {
-        match self {
-            Suit::Spades => "Spades",
-            Suit::Hearts => "Hearts",
-            Suit::Diamonds => "Diamonds",
-            Suit::Clubs => "Clubs",
-        }
-    }
 }
 
 struct PlayingCard {
@@ -47,7 +38,7 @@ impl PlayingCard {
     }
 
     pub fn as_str(&self) -> String {
-        format!("(Suit={}, Rank={})", self.suit.as_str(), self.rank)
+        format!("(Suit={}, Rank={})", self.suit, self.rank)
     }
 }
 
