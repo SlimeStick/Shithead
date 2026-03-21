@@ -1,5 +1,5 @@
 enum PlayingCardError {
-    InvalidRank {rank: u8},
+    InvalidRank { rank: u8 },
 }
 
 impl PlayingCardError {
@@ -24,32 +24,26 @@ impl Suit {
             Suit::Spades => "Spades",
             Suit::Hearts => "Hearts",
             Suit::Diamonds => "Diamonds",
-            Suit::Clubs => "Clubs"
+            Suit::Clubs => "Clubs",
         }
     }
 }
 
 struct PlayingCard {
     suit: Suit,
-    rank: u8
+    rank: u8,
 }
 
-impl PlayingCard
-{
+impl PlayingCard {
     pub const MIN_RANK: u8 = 1;
     pub const MAX_RANK: u8 = 13;
 
-    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, PlayingCardError>
-    {
-        if (rank < PlayingCard::MIN_RANK) |
-            (rank > PlayingCard::MAX_RANK) {
-            return Err(PlayingCardError::InvalidRank{rank})
+    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, PlayingCardError> {
+        if (rank < PlayingCard::MIN_RANK) | (rank > PlayingCard::MAX_RANK) {
+            return Err(PlayingCardError::InvalidRank { rank });
         }
 
-        Ok(Self {
-            suit,
-            rank
-        })
+        Ok(Self { suit, rank })
     }
 
     pub fn as_str(&self) -> String {
@@ -57,10 +51,9 @@ impl PlayingCard
     }
 }
 
-fn unsafe_main() -> Result<(), PlayingCardError>  {
+fn unsafe_main() -> Result<(), PlayingCardError> {
     for suit in [Suit::Clubs, Suit::Diamonds, Suit::Hearts, Suit::Spades] {
-        for rank in PlayingCard::MIN_RANK..=PlayingCard::MAX_RANK
-        {
+        for rank in PlayingCard::MIN_RANK..=PlayingCard::MAX_RANK {
             let card = PlayingCard::new(suit, rank)?;
             println!("{}", card.as_str())
         }
@@ -74,6 +67,6 @@ fn main() {
     //  parameters but another function may return a different number or different types
     match unsafe_main() {
         Ok(_) => (),
-        Err(e) => println!("Caught error {}", e.as_str())
+        Err(e) => println!("Caught error {}", e.as_str()),
     }
 }
