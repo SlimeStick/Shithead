@@ -1,3 +1,4 @@
+use std::fmt::Display;
 use std::process::{ExitCode, Termination};
 use strum_macros::{Display};
 
@@ -38,8 +39,12 @@ impl PlayingCard {
         Ok(Self { suit, rank })
     }
 
-    pub fn to_string(&self) -> String {
-        format!("(Suit={}, Rank={})", self.suit, self.rank)
+
+}
+
+impl Display for PlayingCard {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", format!("(Suit={}, Rank={})", self.suit, self.rank))
     }
 }
 
