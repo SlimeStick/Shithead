@@ -9,7 +9,10 @@ enum ShitheadError {
 impl Termination for ShitheadError {
     fn report(self) -> ExitCode {
         match self {
-            Self::InvalidRank {rank : _} => ExitCode::from(1),
+            Self::InvalidRank {rank : invalid_rank} => {
+                println!("Invalid rank: {invalid_rank}");
+                ExitCode::from(1)
+            },
         }
     }
 }
