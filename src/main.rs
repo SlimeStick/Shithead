@@ -1,55 +1,12 @@
-use std::fmt::Display;
+pub mod playing_card;
+pub mod shithead_error;
+
+use crate::shithead_error::ShitheadError;
+use crate::playing_card::{Suit, PlayingCard};
+
 use std::process::{ExitCode, Termination};
-use strum_macros::{Display};
-
-enum ShitheadError {
-    InvalidRank { rank: u8 },
-}
-
-impl Termination for ShitheadError {
-    fn report(self) -> ExitCode {
-        match self {
-            Self::InvalidRank {rank : invalid_rank} => {
-                println!("Invalid rank: {invalid_rank}");
-                ExitCode::from(1)
-            },
-        }
-    }
-}
-
-#[derive(Copy, Clone, Display)]
-enum Suit {
-    Spades,
-    Hearts,
-    Diamonds,
-    Clubs,
-}
-
-struct PlayingCard {
-    suit: Suit,
-    rank: u8,
-}
-
-impl PlayingCard {
-    pub const MIN_RANK: u8 = 1;
-    pub const MAX_RANK: u8 = 13;
-
-    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, ShitheadError> {
-        if (rank < PlayingCard::MIN_RANK) || (rank > PlayingCard::MAX_RANK) {
-            return Err(ShitheadError::InvalidRank { rank });
-        }
-
-        Ok(Self { suit, rank })
-    }
 
 
-}
-
-impl Display for PlayingCard {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", format!("(Suit={}, Rank={})", self.suit, self.rank))
-    }
-}
 
 fn play_shithead() -> Result<(), ShitheadError> {
     for suit in [Suit::Clubs, Suit::Diamonds, Suit::Hearts, Suit::Spades] {
