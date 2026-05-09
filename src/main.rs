@@ -1,13 +1,14 @@
+use std::process::{ExitCode, Termination};
 use strum_macros::{Display};
 
-enum PlayingCardError {
+enum ShitheadError {
     InvalidRank { rank: u8 },
 }
 
-impl PlayingCardError {
-    pub fn as_str(&self) -> String {
+impl Termination for ShitheadError {
+    fn report(self) -> ExitCode {
         match self {
-            Self::InvalidRank { rank } => format!("InvalidRank received {}", rank),
+            Self::InvalidRank {rank : _} => ExitCode::from(1),
         }
     }
 }
@@ -29,9 +30,9 @@ impl PlayingCard {
     pub const MIN_RANK: u8 = 1;
     pub const MAX_RANK: u8 = 13;
 
-    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, PlayingCardError> {
+    pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, ShitheadError> {
         if (rank < PlayingCard::MIN_RANK) || (rank > PlayingCard::MAX_RANK) {
-            return Err(PlayingCardError::InvalidRank { rank });
+            return Err(ShitheadError::InvalidRank { rank });
         }
 
         Ok(Self { suit, rank })
@@ -42,22 +43,19 @@ impl PlayingCard {
     }
 }
 
-fn unsafe_main() -> Result<(), PlayingCardError> {
+fn play_shithead() -> Result<(), ShitheadError> {
     for suit in [Suit::Clubs, Suit::Diamonds, Suit::Hearts, Suit::Spades] {
         for rank in PlayingCard::MIN_RANK..=PlayingCard::MAX_RANK {
             let card = PlayingCard::new(suit, rank)?;
             println!("{}", card.as_str())
         }
     }
-
     Ok(())
 }
 
-fn main() {
-    // TODO: Figure out how to handle different error signatures. PlayingCard::new returns 2
-    //  parameters but another function may return a different number or different types
-    match unsafe_main() {
-        Ok(_) => (),
-        Err(e) => println!("Caught error {}", e.as_str()),
+fn main() -> ExitCode {
+    match play_shithead() {
+        Ok(()) => ExitCode::SUCCESS,
+        Err(e) => e.report(),
     }
 }
