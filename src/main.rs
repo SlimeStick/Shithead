@@ -30,7 +30,7 @@ impl PlayingCard {
     pub const MAX_RANK: u8 = 13;
 
     pub fn new(suit: Suit, rank: u8) -> Result<PlayingCard, PlayingCardError> {
-        if (rank < PlayingCard::MIN_RANK) | (rank > PlayingCard::MAX_RANK) {
+        if (rank < PlayingCard::MIN_RANK) || (rank > PlayingCard::MAX_RANK) {
             return Err(PlayingCardError::InvalidRank { rank });
         }
 
